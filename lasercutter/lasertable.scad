@@ -6,10 +6,12 @@ frame_width = 20.0;
 pillar_thickness = frame_width / 2;
 cellsize = 9.0;
 cellthickness = 1.0;
+mesh_offset = 10;
 table_thickness = 5.0;
 table_width = width - 2 * frame_width;
 table_depth = depth - 2 * frame_width;
-
+mesh_width = table_width - mesh_offset * 2;
+mesh_depth = table_depth - mesh_offset * 2;
 module frame()
 {
     cube(size = [width, frame_width, frame_thickness]);
@@ -34,36 +36,39 @@ module table()
     {
         cube(size = [table_width, table_depth, table_thickness]);
 
-        depthoffset = (table_depth - floor(table_depth / cellsize / 1.733) * cellsize * 1.733) / 2;
+        depthoffset = (mesh_depth - floor(mesh_depth / cellsize / 1.733) * cellsize * 1.733) / 2;
 
-        translate([cellsize / 2 + (table_width - (floor((table_width / cellsize)))*cellsize) / 2 ,
-                   cellsize / 2 + depthoffset,
-                   -table_thickness / 2])
+        translate([mesh_offset, mesh_offset, 0])
         {
-            for(i = [0:floor(table_width / cellsize) - 1])
+            translate([cellsize / 2 + (mesh_width - (floor((mesh_width / cellsize)))*cellsize) / 2 ,
+                       cellsize / 2 + depthoffset,
+                       -table_thickness / 2])
             {
-                for(j = [0:floor(table_depth / cellsize / 1.733) - 1])
+                for(i = [0:floor(mesh_width / cellsize) - 1])
                 {
-                    translate([i * cellsize, j * cellsize * 1.733, 0])
+                    for(j = [0:floor(mesh_depth / cellsize / 1.733) - 1])
                     {
-                        rotate([0, 0, 90])
-                        cylinder(d = cellsize / 0.866 - cellthickness , h = table_thickness * 2, $fn = 6);
+                        translate([i * cellsize, j * cellsize * 1.733, 0])
+                        {
+                            rotate([0, 0, 90])
+                            cylinder(d = cellsize / 0.866 - cellthickness , h = table_thickness * 2, $fn = 6);
+                        }
                     }
                 }
             }
-        }
-        translate([cellsize + (table_width - (floor((table_width / cellsize)))*cellsize) / 2 ,
-                   cellsize + cellsize / 2.73 + depthoffset,
-                   -table_thickness / 2])
-        {
-            for(i = [0:floor(table_width / cellsize) - 2])
+            translate([cellsize + (mesh_width - (floor((mesh_width / cellsize)))*cellsize) / 2 ,
+                       cellsize + cellsize / 2.73 + depthoffset,
+                       -table_thickness / 2])
             {
-                for(j = [0:floor(table_depth / cellsize / 1.733) - 1])
+                for(i = [0:floor(mesh_width / cellsize) - 2])
                 {
-                    translate([i * cellsize, j * cellsize * 1.733, 0])
+                    for(j = [0:floor(mesh_depth / cellsize / 1.733) - 1])
                     {
-                        rotate([0, 0, 90])
-                        cylinder(d = cellsize / 0.866 - cellthickness , h = table_thickness * 2, $fn = 6);
+                        translate([i * cellsize, j * cellsize * 1.733, 0])
+                        {
+                            rotate([0, 0, 90])
+                            cylinder(d = cellsize / 0.866 - cellthickness , h = table_thickness * 2, $fn = 6);
+                        }
                     }
                 }
             }
