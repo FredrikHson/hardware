@@ -4,7 +4,7 @@ depth = 230.0;
 frame_thickness = 10.0;
 frame_width = 20.0;
 pillar_thickness = frame_width / 2;
-cellsize = 19.0;
+cellsize = 9.0;
 cellthickness = 1.0;
 mesh_offset = 10;
 table_thickness = 5.0;
@@ -94,7 +94,7 @@ module table_guide()
                     cube([frame_width,  frame_width * 1.5 , guide_thickness]);
                 }
             }
-            translate([0, 0 , -guide_thickness*2])
+            translate([0, 0 , -guide_thickness * 2])
             {
                 cylinder(d = frame_width * 0.75, h = guide_thickness * 2);
             }
@@ -112,7 +112,7 @@ module table_guide()
 
 
 
-
+// guiderods
 translate([frame_width / 2,  frame_width / 2, 0])
 {
     % cylinder(d = pillar_thickness, h = height);
@@ -129,12 +129,29 @@ translate([width - frame_width / 2,  depth - frame_width / 2, 0])
 {
     % cylinder(d = pillar_thickness, h = height);
 }
+// screws
+translate([frame_width / 2 + frame_width,  frame_width / 2, 0])
+{
+    % cylinder(d = pillar_thickness, h = height);
+}
+translate([frame_width / 2 + frame_width,  depth - frame_width / 2, 0])
+{
+    % cylinder(d = pillar_thickness, h = height);
+}
+translate([width - frame_width / 2 - frame_width,  frame_width / 2, 0])
+{
+    % cylinder(d = pillar_thickness, h = height);
+}
+translate([width - frame_width / 2 - frame_width,  depth - frame_width / 2, 0])
+{
+    % cylinder(d = pillar_thickness, h = height);
+}
 % frame();
 translate([0, 0, height - frame_thickness])
 {
     % frame();
 }
-table_height = $t * (height - frame_thickness*2-guide_thickness*3) + frame_thickness+guide_thickness*3;
+table_height = $t * (height - frame_thickness * 2 - guide_thickness * 3) + frame_thickness + guide_thickness * 3;
 translate([frame_width, frame_width, table_height])
 {
     table();
