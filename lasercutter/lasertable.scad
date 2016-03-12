@@ -105,95 +105,130 @@ module table_guide()
                 cylinder(d = frame_width * 0.75, h = guide_thickness * 2);
             }
         }
-        translate([0, 0 , -guide_thickness * 3])
+        union()
         {
-            cylinder(d = pillar_thickness, h = guide_thickness * 10);
-        }
-        translate([0, screw_offset , -guide_thickness / 2])
-        {
-            cylinder(d = pillar_thickness, h = guide_thickness * 2);
-        }
-    }
-}
-
-
-
-// guiderods
-translate([frame_width / 2,  frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([frame_width / 2,  depth - frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([width - frame_width / 2,  frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([width - frame_width / 2,  depth - frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-// screws
-translate([frame_width / 2 + screw_offset,  frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([frame_width / 2 + screw_offset,  depth - frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([width - frame_width / 2 - screw_offset,  frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-translate([width - frame_width / 2 - screw_offset,  depth - frame_width / 2, 0])
-{
-    % cylinder(d = pillar_thickness, h = height);
-}
-% frame();
-translate([0, 0, height - frame_thickness])
-{
-    % frame();
-}
-table_height = $t * (height - frame_thickness * 2 - guide_thickness * 3) + frame_thickness + guide_thickness * 3;
-translate([frame_width, frame_width, table_height])
-{
-    table();
-}
-// guides
-translate([frame_width / 2, frame_width / 2, table_height - guide_thickness ])
-{
-    rotate([0, 0, -90])
-    {
-        table_guide();
-    }
-}
-translate([width - frame_width / 2, frame_width / 2, table_height - guide_thickness ])
-{
-    rotate([0, 0, -90])
-    {
-        mirror([0, 1, 0])
-        {
-            table_guide();
+            translate([0, 0 , -guide_thickness * 3])
+            {
+                cylinder(d = pillar_thickness, h = guide_thickness * 10);
+            }
+            translate([0, screw_offset , -guide_thickness / 2])
+            {
+                cylinder(d = pillar_thickness, h = guide_thickness * 2);
+            }
         }
     }
 }
-translate([frame_width / 2, depth - frame_width / 2, table_height - guide_thickness ])
+module rodArray(a_width, a_depth, r_hight, r_diam, aw_count = 2, ad_count = 2)
 {
-    rotate([0, 0, 90])
+    for(i = [0:aw_count - 1])
     {
-        mirror([0, 1, 0])
+        for(j = [0:ad_count - 1])
+        {
+            translate([a_width / (aw_count - 1), a_depth / (ad_count - 1), 0])
+            {
+                cylinder(d = r_diam, h = r_height);
+            }
+        }
+    }
+}
+module outerFrame()
+{
+    union()
+    {
+        frame();
+        // guiderods
+        translate([frame_width / 2,  frame_width / 2, 0.05])
+        {
+            cylinder(d = pillar_thickness, h = height - 0.1);
+        }
+        translate([frame_width / 2,  depth - frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([width - frame_width / 2,  frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([width - frame_width / 2,  depth - frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        // screws
+        translate([frame_width / 2 + screw_offset,  frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([frame_width / 2 + screw_offset,  depth - frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([width - frame_width / 2 - screw_offset,  frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([width - frame_width / 2 - screw_offset,  depth - frame_width / 2, 0])
+        {
+            cylinder(d = pillar_thickness, h = height);
+        }
+        translate([0, 0, height - frame_thickness])
+        {
+            frame();
+        }
+    }
+}
+module guides()
+{
+    // guides
+    translate([frame_width / 2, frame_width / 2, table_height - guide_thickness ])
+    {
+        rotate([0, 0, -90])
         {
             table_guide();
         }
     }
-}
-translate([width - frame_width / 2, depth - frame_width / 2, table_height - guide_thickness ])
-{
-    rotate([0, 0, 90])
+    translate([width - frame_width / 2, frame_width / 2, table_height - guide_thickness ])
     {
-        table_guide();
+        rotate([0, 0, -90])
+        {
+            mirror([0, 1, 0])
+            {
+                table_guide();
+            }
+        }
+    }
+    translate([frame_width / 2, depth - frame_width / 2, table_height - guide_thickness ])
+    {
+        rotate([0, 0, 90])
+        {
+            mirror([0, 1, 0])
+            {
+                table_guide();
+            }
+        }
+    }
+    translate([width - frame_width / 2, depth - frame_width / 2, table_height - guide_thickness ])
+    {
+        rotate([0, 0, 90])
+        {
+            table_guide();
+        }
+    }
+
+}
+
+union()
+{
+    % outerFrame();
+    table_height = $t * (height - frame_thickness * 2 - guide_thickness * 3) + frame_thickness + guide_thickness * 3;
+    translate([0, 0, table_height - guide_thickness])
+    {
+        guides();
+    }
+    translate([frame_width, frame_width, table_height])
+    {
+        color([0.7, 0.7, 0.7])
+        {
+            table();
+        }
     }
 }
