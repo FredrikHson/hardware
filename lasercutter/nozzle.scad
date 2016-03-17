@@ -53,7 +53,15 @@ translate([0, 0, -total_height + lensoffset])
             {
                 translate([0, outer_radius + 1, 0])
                 {
-                    cylinder(r = 4, h = total_height - 12, $fn = 32);
+
+                    union()
+                    {
+                        cylinder(r = 4, h = total_height - 12, $fn = 32);
+                        translate([0, 0, total_height-12])
+                        {
+                            sphere(r = 4,$fn=32);
+                        }
+                    }
                 }
             }
         }
