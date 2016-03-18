@@ -5,6 +5,10 @@ lens_radius = 10;
 focal_distance = 50.8;
 lensoffset = 5;
 lensthickness = 2;
+ridges = 5;
+ridge_radius = 8;
+ridge_depth = 2;
+
 translate([0, 0, -focal_distance - 1])
 {
     color("red")
@@ -47,19 +51,19 @@ translate([0, 0, -total_height + lensoffset])
         /*cube([40, 40, 95]);*/
         /*}*/
 
-        for(angle = [0:360 / 8:360])
+        for(angle = [0:360 / ridges:360])
         {
             rotate([0, 0, angle])
             {
-                translate([0, outer_radius + 1, 0])
+                translate([0, outer_radius + ridge_radius - ridge_depth, 0])
                 {
 
                     union()
                     {
-                        cylinder(r = 4, h = total_height - 12, $fn = 32);
-                        translate([0, 0, total_height-12])
+                        cylinder(r = ridge_radius, h = total_height - 12, $fn = 64);
+                        translate([0, 0, total_height - 12])
                         {
-                            sphere(r = 4,$fn=32);
+                            sphere(r = ridge_radius, $fn = 64);
                         }
                     }
                 }
